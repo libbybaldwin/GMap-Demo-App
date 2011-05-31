@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html> 
+	<head>
+	
+		<title>jQuery Mobile Examples</title>
+		<meta name="description" content="jQuery Mobile, Google Maps and HTML5" />
+		<meta http-equiv="content-language" content="en"/>
+        <meta name="viewport" content="width=screen.width, initial-scale=1.0, user-scalable=no" />  
+
+        <link rel="stylesheet" href="../jquery.mobile/jquery.mobile.min.20110527.css" type="text/css" />
+        <link rel="stylesheet" href="gmapdemo.css" type="text/css" />
+<!--         <script type="text/javascript" src="../jquery.mobile/jquery-1.5.2.js"></script> -->
+        <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+
+  		<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>         
+
+		 <!-- To use PhoneGap APIs uncomment the following -->         
+	     <script type="text/javascript" charset="utf-8" src="../phonegap.0.9.5.1.js"></script>
+
+        <script type="text/javascript" src="../jquery.mobile/jquery.mobile.min.20110527.js"></script>
+		<script type="text/javascript" src="../ui/jquery.ui.map.min.js"></script>
+
+	</head>
+	<body> 
+
+		<div data-role="page" class="gmap-bg" id="gmap-ex2"> <!-- START gmap-ex2 -->
+
+		<div data-role="header" data-theme="c">
+		<a href="#page-home" data-rel="back" data-icon="back" data-iconpos="notext"></a>
+		<h1>GeoLocation and Layers</h1>
+		</div>
+
+			<div data-role="content">
+				
+				<div class="ui-bar-c ui-corner-all ui-shadow" id="map_item">
+					<div id="map_canvas_2"></div>
+				</div>
+
+			<p><strong>Tap</strong> on marker to see location data. <strong>Tap</strong> buttons below to toggle map layers.</p>
+
+			<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;">
+				<a href="#" data-role="button" id="ex2-streetview">&nbsp;Streetview&nbsp;</a>
+				<a href="#" data-role="button" id="ex2-traffic">&nbsp;&nbsp;Traffic&nbsp;&nbsp;</a>
+				<a href="#" data-role="button" id="ex2-terrain">&nbsp;&nbsp;Terrain&nbsp;&nbsp;</a>
+			</div>
+			<p>Edit <strong>Location</strong>, <strong>Security</strong> and <strong>Network</strong> settings to enable device geolocation.</p>
+			
+			<div id="gmap-info">
+				<h2>AppLaud with jQuery Mobile and Google Maps</h2>
+				<p>Install <a href="http://www.mobiledevelopersolutions.com/home/start">MDS AppLaud</a> and
+				download the <a href="http://code.google.com/p/jquery-ui-map/">jQuery Google Maps Plugin</a>.
+				AppLaud bundles PhoneGap for Android and jQuery Mobile.
+				Download GMap Demo <a href="https://github.com/libbybaldwin/GMap-Demo-App">source</a> for examples.</p>
+			</div>
+			</div> <!-- /content -->
+
+			<div data-role="footer" data-theme="c" >
+				<div data-role="navbar">
+					<ul>
+						<li><a rel="external" href="../index.html">Back to Menu</a></li>
+						<li><a rel="external" href="../about.html">About GMap Demo</a></li>
+					</ul>
+				</div>
+			</div>
+		</div><!-- /gmap-ex2 -->
+
+		<script type="text/javascript">
+		$('#gmap-ex2').live("pagebeforecreate", function() {
+			var useragent = navigator.userAgent;
+			var mapdiv = document.getElementById("map_canvas_2");
+			var mapitem = document.getElementById("map_item");
+			var gmapinfo = document.getElementById("gmap-info");
+				
+			//alert("User-agent header : " + navigator.userAgent);
+
+ 			if ((useragent.indexOf('Android 3.') != -1) && (screen.width >= 800) && (screen.height >= 800)) {
+  				// galaxy tab
+    			mapdiv.style.height = '480px';
+ 				mapdiv.style.margin = '0.8em';  
+ 				gmapinfo.style.display = 'block';				
+  			} else if ((useragent.indexOf('Android 2.') != -1 ) || (useragent.indexOf('Android 3.') != -1 )) {
+  				mapitem.style.maxWidth = '490px';
+ 				mapdiv.style.height = '300px';
+ 				mapdiv.style.margin = '0.4em';
+  			} else {
+    			mapdiv.style.height = '450px';
+ 				mapdiv.style.margin = '1em';
+ 				gmapinfo.style.display = 'block';				
+ 			}
+			});	             
+        $('#gmap-ex2').live("pageshow", function() {
+                var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
+                var currentLatLng;
+                var accuracy= -1;
+                
+                defaultLatLngMsg("Using device geolocation service to find location.");          
+                if ( navigator.geolocation ) {
+                    defaultLatLngMsg("Using device geolocation service to find location.");
+                    navigator.geolocation.getCurrentPosition ( function( position ) {
+                            currentLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                            accuracy = position.coords.accuracy;
+                            makeMap(currentLatLng, accuracy);
+                        }, function(error) {
+                            currentLatLng = new google.maps.LatLng(42.3375879, -83.049514);
+                            defaultLatLngMsg(null);
+                            makeMap(currentLatLng, accuracy);
+                        } , { timeout: 3000, enableHighAccuracy: true }
+                        );                                     
+                    } else { 
+                        currentLatLng = new google.maps.LatLng(42.3375879, -83.049514);
+                        defaultLatLngMsg(null);
+                        makeMap(currentLatLng, accuracy);
+                    } 
+                                          
+                function makeMap (curLatLng, accuracy) { 
+                	$('#map_canvas_2').gmap( { 'center': curLatLng,  'zoom': 11, 'callback': function (map) { 
+                    	$('#map_canvas_2').gmap('displayStreetView', 'map_canvas_2', { 'position' : curLatLng, 'visible' : false, pov: { heading: 15, pitch: 10, zoom: 1 } });
+                       	$('#map_canvas_2').gmap('addMarker', { 'title': 'You are here!', 'bound': true, 
+                           'animation': google.maps.Animation.DROP, 'position': curLatLng }, function(map, marker) {
+                               $('#map_canvas_2').gmap('addInfoWindow', { 'position': marker.getPosition() },
+                                       function(iw) {
+                                           $(marker).click(function() {
+                                               getGeoSearchData(iw, accuracy, marker);
+                                               // recenter on marker when iw is closed
+                                               google.maps.event.addListener(iw, 'closeclick', function() { 
+                                                   $('#map_canvas_2').gmap('option', 'center', marker.getPosition());
+                                               });                                                
+                                           });
+                        	   });  // end addInfoWindow
+                      	}); 
+                  	}
+               	});
+          	} // end makeMap
+
+                function getGeoSearchData(iw, accuracy, marker) {
+                    var accuracyStr = (accuracy === -1) ? 'Near:' : 'Within ' + accuracy + 'm of:';
+                    $('#map_canvas_2').gmap('search', {'location': marker.getPosition() }, function(found, results) {
+                        if ( found ) {
+                            var addr = results[0].formatted_address.split(', ', 4);
+                            //alert('[' + addr[0] + '] [' + addr[1] + '] [' + addr[2] + '] [' + addr[3] + ']');
+                            iw.setContent('<div id="ex2-iw-content" style="font-size:14px;max-width:240px;width:240px;height:300px;max-height:300px; !important;color:green;">You are here!<br/>Lat: ' 
+                                + marker.getPosition().lat().toFixed(4) + ', Lng: ' + marker.getPosition().lng().toFixed(4) + '<br/>' + accuracyStr 
+                                + '<br/>' + addr[0] + '<br/>' + addr[1] + ', ' + addr[2] + '<br/>' + addr[3] + '</div>');
+                        } else {
+                            defaultLatLngMsg('Unable to get GeoSearch data.');
+                            iw.setContent('<div id="ex2-iw-content" style="font-size:14px;max-width:240px;width:240px;height:300px;max-height:300px; !important;color:green;">You are here!<br/>Lat: ' 
+                                + marker.getPosition().lat().toFixed(4) + ', Lng: ' + marker.getPosition().lng().toFixed(4) + '</div>');
+                        }
+                        iw.open($('#map_canvas_2').gmap('getMap'), marker);
+                    });
+                }
+
+                // Briefly show that default loc is being used
+                function defaultLatLngMsg (locMsg) {
+                    var msg = "Device location <span style='color:#f33;'>not found</span>. Using default location.";
+                    var opac = 1.0;
+                    if (locMsg !== null) {
+                        msg = locMsg;
+                        opac = 0.9;
+                    }
+                    $("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>"
+                        + msg + "</h1></div>")
+                        .css({ "display": "block", "opacity": opac, "top": $(window).scrollTop() + 100 })
+                        .appendTo( $.mobile.pageContainer )
+                        .delay( 2400 )
+                        .fadeOut( 1200, function(){
+                            $(this).remove();
+                        });
+                }
+
+                var trafficLayer = new google.maps.TrafficLayer();
+                $('#ex2-traffic').toggle(function () {                                                  
+                        trafficLayer.setMap($('#map_canvas_2').gmap('getMap')); 
+                    }, function() {
+                        trafficLayer.setMap(null); 
+                        resetbutton(this);
+                    } 
+                );
+                            
+                $('#ex2-terrain').toggle(function () {
+                        $('#map_canvas_2').gmap('option', 'mapTypeId', google.maps.MapTypeId.TERRAIN);
+                    }, function() {
+                        $('#map_canvas_2').gmap('option', 'mapTypeId', google.maps.MapTypeId.ROADMAP);
+                        resetbutton(this);
+                    } 
+                );              
+
+                $('#ex2-streetview').toggle(function () {                                                                   
+                        $('#map_canvas_2').gmap('getService', 'StreetViewPanorama').setVisible(true);
+                    }, function() {
+                        $('#map_canvas_2').gmap('getService', 'StreetViewPanorama').setVisible(false);
+                        resetbutton(this);
+                    } 
+                );
+                
+                // use if want to change marker in same place with button
+                //var markerIndex = 0;                      
+                //$('#ex2-markers').click(function () { 
+                //  $('#map_canvas_2').gmap('clearMarkers');
+                //  if (markerIndex === 26) { markerIndex = 0; }
+                            
+                //  $('#map_canvas_2').gmap('addMarker', { 'bounds':false, 'position': $('#map_canvas_2').gmap('option', 'center'), 
+                //      'icon': new google.maps.MarkerImage('images/markers/' + markerIndex + '.png') }
+                //  );
+                //  markerIndex++;
+                //  return false;
+                //});
+                                        
+            });  // end pageshow
+			</script>						
+	</body>
+</html>

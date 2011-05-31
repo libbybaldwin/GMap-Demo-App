@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html> 
+	<head>
+	
+		<title>jQuery Mobile Examples</title>
+		<meta name="description" content="jQuery Mobile, Google Maps and HTML5" />
+		<meta http-equiv="content-language" content="en"/>
+        <meta name="viewport" content="width=screen.width, initial-scale=1.0, user-scalable=no" />  
+
+        <link rel="stylesheet" href="../jquery.mobile/jquery.mobile.min.20110527.css" type="text/css" />
+        <link rel="stylesheet" href="gmapdemo.css" type="text/css" />
+<!--         <script type="text/javascript" src="../jquery.mobile/jquery-1.5.2.js"></script> -->
+        <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+
+  		<script src="http://maps.google.com/maps/api/js?sensor=true&libraries=panoramio" type="text/javascript"></script>         
+        <script type="text/javascript" src="../jquery.mobile/jquery.mobile.min.20110527.js"></script>
+		<script type="text/javascript" src="../ui/jquery.ui.map.min.js"></script>
+		<script type="text/javascript" src="../ui/jquery.ui.map.extensions.js"></script>
+
+		<!-- To use PhoneGap APIs uncomment the following -->         
+		<script type="text/javascript" charset="utf-8" src="../phonegap.0.9.5.1.js"></script>
+	</head>
+	<body> 		
+		<div data-role="page" class="gmap-bg" id="gmap-ex5"> <!-- START gmap-ex5 -->
+
+			<div data-role="header" data-theme="c">
+			<a href="#page-home" data-rel="back" data-icon="back" data-iconpos="notext"></a>
+			<h1>Panoramio Layer</h1>
+			</div>
+
+			<script type="text/javascript">
+
+            $('#gmap-ex5').live("pagebeforecreate", function() {
+ 				var useragent = navigator.userAgent;
+  				var mapdiv = document.getElementById("map_canvas_5");
+		  		var mapitem = document.getElementById("map_item");
+
+ 				if ((useragent.indexOf('Android 3.') != -1) && (screen.width >= 800) && (screen.height >= 800)) {
+  					// galaxy tab
+    				mapdiv.style.height = '480px';
+ 					mapdiv.style.margin = '0.8em';  				
+  				} else if ((useragent.indexOf('Android 2.') != -1 ) || (useragent.indexOf('Android 3.') != -1 )) {
+  					mapitem.style.maxWidth = '490px';
+ 					mapdiv.style.height = '310px';
+ 					mapdiv.style.margin = '0.4em';
+  				} else {
+    				mapdiv.style.height = '450px';
+ 					mapdiv.style.margin = '1em';
+  				}
+			});			
+            $('#gmap-ex5').live("pageshow", function() {
+                var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
+                athens = new google.maps.LatLng(37.96098194415897, 23.697509765625); 
+                bangkok = new google.maps.LatLng(13.675344552820276, 100.55511474609375);
+                sydney = new google.maps.LatLng(-33.872125899439446, 151.1821746826172);
+                
+                $('#map_canvas_5').gmap({'center': athens, 'zoom' : 10 });                  
+                
+                var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+                
+                panoramioLayer.setMap($('#map_canvas_5').gmap('getMap'));
+                $('#ex5-athens').click(function () {                                                    
+                    $('#map_canvas_5').gmap('option', 'center', athens);
+                    resetother('#ex5-bangkok','#ex5-sydney','#ex5-current');
+                });
+                $('#ex5-bangkok').click(function () { 
+                    $('#map_canvas_5').gmap('option', 'center', bangkok);
+                    resetother('#ex5-athens','#ex5-sydney','#ex5-current');
+                });
+                $('#ex5-sydney').click(function () {                                                    
+                   $('#map_canvas_5').gmap('option', 'center', sydney);
+                   resetother('#ex5-bangkok','#ex5-athens','#ex5-current');
+                });
+                $('#ex5-current').click(function () { 
+                    $('#map_canvas_5').gmap('getCurrentPosition', function(status, pos) {
+                    	if (status === "OK") {
+                    		//alert("ok");
+                    		$('#map_canvas_5').gmap('option', 'center', new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+                    	} else {
+                    		defaultLatLngMsg ();
+                    		//alert("not ok");
+                    		$('#map_canvas_5').gmap('option', 'center', new google.maps.LatLng(34.0522342, -118.2436849));
+                    	}                    
+                    }, { timeout: 3000, enableHighAccuracy: true } );                                           
+                    
+                    resetother('#ex5-bangkok','#ex5-sydney','#ex5-athens');
+                });
+
+                function resetother(one, two, three) {
+                    resetbutton(one); resetbutton(two); resetbutton(three);
+                }
+                
+                function defaultLatLngMsg () {
+                    var msg = "<span style='color:#f33;'>Error</span> while getting geolocation. Using default location.";
+                    $("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>"
+                        + msg + "</h1></div>")
+                        .css({ "display": "block", "opacity": 1.0, "top": $(window).scrollTop() + 100 })
+                        .appendTo( $.mobile.pageContainer )
+                        .delay( 2400 )
+                        .fadeOut( 1200, function(){
+                            $(this).remove();
+                        });
+                }                
+                
+            });
+			</script>
+			<div data-role="content">
+				
+				<div class="ui-bar-c ui-corner-all ui-shadow" id="map_item">				
+					<div id="map_canvas_5"></div>					
+				</div>
+				
+				<p><strong>Tap</strong> image to see details in info window.</p>
+				
+				<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;">
+					<a href="#" data-role="button" class="ui-btn-active" id="ex5-athens">Athens</a>
+					<a href="#" data-role="button" id="ex5-bangkok">Bangkok</a>
+					<a href="#" data-role="button" id="ex5-sydney">Sydney</a>
+					<a href="#" data-role="button" id="ex5-current">Current</a>
+				</div>
+
+				<p>To access Panoramio layer use <strong>sensor=true&libraries=panoramio</strong> with google maps <strong>jsapi</strong>.</p>
+
+				<div id="show-gmap-info">
+					<h2>AppLaud with jQuery Mobile and Google Maps</h2>
+					<p>Install <a href="http://www.mobiledevelopersolutions.com/home/start">MDS AppLaud</a> and
+					download the <a href="http://code.google.com/p/jquery-ui-map/">jQuery Google Maps Plugin</a>.
+					AppLaud bundles PhoneGap for Android and jQuery Mobile.
+					Download GMap Demo <a href="https://github.com/libbybaldwin/GMap-Demo-App">source</a> for examples.</p>
+				</div>
+
+			</div>
+			
+			<div data-role="footer" data-theme="c" >
+				<div data-role="navbar">
+					<ul>
+						<li><a rel="external" href="../index.html">Back to Menu</a></li>
+						<li><a rel="external" href="../about.html">About GMap Demo</a></li>
+					</ul>
+				</div>
+			</div>
+		</div> <!-- /gmap-ex5 -->
+				
+	</body>
+	
+</html>

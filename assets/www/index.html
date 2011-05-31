@@ -1,0 +1,93 @@
+<!DOCTYPE html> 
+<html> 
+	<head>	
+		<title>jQuery Mobile with Google Maps Plugin Demo by AppLaud</title>
+		<meta http-equiv="content-language" content="en"/>
+        <meta name="viewport" content="width=screen.width, initial-scale=1.0, user-scalable=no" />  
+
+        <link rel="stylesheet" href="jquery.mobile/jquery.mobile.min.20110527.css" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="mobile.demos/gmapdemo.css" />
+ 
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+<!--         <script type="text/javascript" src="jquery.mobile/jquery-1.5.2.js"></script> -->
+        <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+        <script type="text/javascript" src="jquery.mobile/jquery.mobile.min.20110527.js"></script>
+	    <script type="text/javascript" src="ui/jquery.ui.map.min.js"></script>
+	    <script type="text/javascript" charset="utf-8" src="phonegap.0.9.5.1.js"></script>
+	
+	</head> 
+
+	<body> 
+
+		<div data-role="page" class="gmap-bg" id="page-home">
+
+			<div data-role="header" data-theme="a" data-position="inline" data-backbtn="false">
+				<h1><span style="color:#eef;">GMap Demo</span></h1>
+				<a rel="external" href="about.html" class="ui-btn-right" style="color:#eef;">About</a>
+			</div>
+
+			<div data-role="content">	
+			<h1 style="line-height:150%;font-size:18px;color:#008695;text-align:center;margin:0 1em 0.2em;">jQuery Google Maps Plugin<br/>
+				<span style="color:#555555;">Demo by MDS </span>
+			    <span style="color:#008595;"><em>App</em></span><span style="color:#888;">Laud </span></h1>
+
+				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d" style="margin-top:0.4em;"> 
+					<li data-role="list-divider">jQuery Mobile & Google Maps Examples</li> 
+					<li><a rel="external" href="mobile.demos/gmapdemo1.html">GeoLocation and Layers</a></li>
+					<li><a rel="external" href="mobile.demos/gmapdemo2.html">GeoCoder and Click/Drag Events</a></li> 
+					<li><a rel="external" href="mobile.demos/gmapdemo3.html">Route and Travel Mode</a></li> 
+					<li><a rel="external" href="mobile.demos/gmapdemo4.html">Streetview and User Controls</a></li> 
+					<li><a rel="external" href="mobile.demos/gmapdemo5.html">Panoramio Layer</a></li> 
+				</ul>
+				
+				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d" id="ui-example-list"> 
+					<li data-role="list-divider">jQuery UI & Google Maps Examples</li> 
+					<li><a rel="external" href="demos/load-Fusion.html">Google Fusion Tables</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/click-drag-geo-search.html">GeoSearch and Click/Drag Events</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/advanced-example.html">Microformats, Streetview, jQuery Dialog</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/google-maps-jquery-markerclusterer.html">Marker Clusterer Utility</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/google-maps-jquery-filtering.html">Custom Controls & Marker Filter by Tag</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/multiple-maps-example.html">Multiple Maps on Single Page</a></li>
+					<li><a rel="external" data-ajax="true" href="demos/load-JSON-example.html">Markers from JSON data</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/load-RDFa-example.html">Markers from RDFa</a></li>
+					<li><a rel="external" data-ajax="false" href="demos/load-Microformat-example.html">Markers from Microformats</a></li>
+				</ul>
+
+			</div>
+			
+		</div>
+
+    	<div id="ft" class="hidden">
+		&#169; Copyright 2011 Libby Baldwin and Mobile Developer Solutions
+		<div id="hcard-Elizabeth-Ann-Baldwin" class="vcard">
+			<span class="fn n"> <span class="given-name">Elizabeth</span>
+				<span class="family-name">Baldwin</span> </span> <span class="adr">
+				<span class="locality">Alameda, California</span> <span
+				class="country-name">USA</span> </span> <span class="url">http://www.mobiledevelopersolutions.com/
+			</span>
+		</div>
+		&#169; Copyright 2011 Johan Säll Larsson
+		<div id="hcard-Johan-Säll-Larsson" class="vcard">
+			<span class="fn n"> <span class="given-name">Johan</span> <span
+				class="family-name">Säll Larsson</span> </span> <span class="adr"> <span
+				class="locality">Göteborg</span>, <span class="country-name">Sweden</span>
+			</span> <span class="url">http://code.google.com/p/jquery-ui-map/ </span>
+		</div>
+		</div>	
+		
+		<script type="text/javascript">
+		$('#page-home').live("pagebeforecreate", function() {
+ 			var useragent = navigator.userAgent;
+       		// alert(useragent);
+  			if ((useragent.indexOf('Android 3.') != -1) && (screen.width >= 800) && (screen.height >= 800)) {
+  				// conservatively adding Microdata only to Android 3 Tabs or desktop
+				$('#ui-example-list').append('<li><a rel="external" data-ajax="false" href="demos/load-Microdata-example.html">Markers from Microdata</a></li>');			
+			} else if ((useragent.indexOf('Android 2.') != -1 ) || (useragent.indexOf('Android 3.') != -1 )) {
+ 			} else {
+				$('#ui-example-list').append('<li><a rel="external" data-ajax="false" href="demos/load-Microdata-example.html">Markers from Microdata</a></li>');
+  			}
+		});
+	</script>
+	</body>
+	
+</html>

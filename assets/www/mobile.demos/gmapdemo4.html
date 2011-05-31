@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html> 
+	<head>	
+		<title>jQuery Mobile Examples</title>
+		<meta name="description" content="jQuery Mobile, Google Maps and HTML5" />
+		<meta http-equiv="content-language" content="en"/>
+        <meta name="viewport" content="width=screen.width, initial-scale=1.0, user-scalable=no" />  
+
+        <link rel="stylesheet" href="../jquery.mobile/jquery.mobile.min.20110527.css" type="text/css" />
+        <link rel="stylesheet" href="gmapdemo.css" type="text/css" />
+<!--         <script type="text/javascript" src="../jquery.mobile/jquery-1.5.2.js"></script> -->
+        <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+
+  		<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>         
+        <script type="text/javascript" src="../jquery.mobile/jquery.mobile.min.20110527.js"></script>
+		<script type="text/javascript" src="../ui/jquery.ui.map.js"></script>
+
+		<!-- To use PhoneGap APIs uncomment the following -->         
+		<!-- <script type="text/javascript" charset="utf-8" src="../phonegap.0.9.5.1.js"></script> -->
+	</head>
+	<body> 
+
+		<div data-role="page" class="gmap-bg" id="gmap-ex1"> <!-- START gmap-ex1 -->
+
+			<div data-role="header" data-theme="c">
+			<a href="#page-home" data-rel="back" data-icon="back" data-iconpos="notext"></a>			
+			<h1>Streetview and User Controls</h1>
+			</div>
+ <script type="text/javascript">
+$('#gmap-ex1').live("pagebeforecreate", function() {
+	var useragent = navigator.userAgent;
+	var mapdiv = document.getElementById("map_canvas");
+  	var mapitem = document.getElementById("map_item");
+	var gmapinfo = document.getElementById("gmap-info");
+
+ 	if ((useragent.indexOf('Android 3.') != -1) && (screen.width >= 800) && (screen.height >= 800)) {
+  		// galaxy tab
+    	mapdiv.style.height = '480px';
+ 		mapdiv.style.margin = '0.8em';  				
+ 		gmapinfo.style.display = 'block';				
+  	} else if ((useragent.indexOf('Android 2.') != -1 ) || (useragent.indexOf('Android 3.') != -1 )) {
+  		mapitem.style.maxWidth = '490px';
+ 		mapdiv.style.height = '300px';
+ 		mapdiv.style.margin = '0.4em';
+  	} else {
+    	mapdiv.style.height = '450px';
+ 		mapdiv.style.margin = '1em';
+		gmapinfo.style.display = 'block';				
+  	}
+});			 
+$('#gmap-ex1').live("pageshow", function() {
+        function getLatLng() {
+            return new google.maps.LatLng(37.8020027, -122.4196192);
+        }
+        
+        $('#map_canvas').gmap({'center': getLatLng(), 'zoom' : 14, 'streetViewControl' : false, 'mapTypeControl' : false, 'callback': function() {
+            $('#map_canvas').gmap('addMarker', {'position': getLatLng(), 'animation': google.maps.Animation.DROP, 'title': 'Hello world!', 
+                'icon': new google.maps.MarkerImage('images/markers/cablecar.png')}, function(map, marker) {
+                    $('#map_canvas').gmap('addInfoWindow', { 'position':marker.getPosition() , 
+                        'content': '<div style="font-size:14px;max-width:240px;width:240px;max-height:200px;color:green;">Welcome to San Francisco!<br/>Powell-Hyde Cable Line<br/>Hyde-Lombard Stop<br/>' + getLatLng() + '</div>'}, 
+                        function(iw) { 
+                            $(marker).click(function() { 
+                                // recenter on marker when iw is closed
+                                google.maps.event.addListener(iw, 'closeclick', function() { 
+                                    $('#map_canvas').gmap('option', 'center', marker.getPosition());
+                                    });                                                                                                            
+                                    iw.open(map, marker);
+                                    }); 
+                                       }); 
+                     });
+            var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
+            var trafficLayer = new google.maps.TrafficLayer();
+            $('#ex1-traffic').toggle(function () {                                                  
+                trafficLayer.setMap($('#map_canvas').gmap('getMap')); 
+            }, function() {
+                trafficLayer.setMap(null); 
+                resetbutton(this); 
+            } 
+            );
+
+            var bicycleLayer = new google.maps.BicyclingLayer();
+            $('#ex1-bike').toggle (function() {
+                bicycleLayer.setMap($('#map_canvas').gmap('getMap'));
+            }, function() {
+                bicycleLayer.setMap(null); 
+                resetbutton(this); 
+            }
+            );
+                        
+            $('#ex1-terrain').toggle(function () {             
+                $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.TERRAIN);
+            }, function() {
+                $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.ROADMAP); 
+                resetbutton(this); 
+            } 
+            );                      
+                
+            // Create streetView, set to false, set POV to face SF Bay
+            $('#map_canvas').gmap('displayStreetView', 'map_canvas', { 'position' : getLatLng(), 'visible' : false, pov: { heading: 90, pitch: -5, zoom: 1 } });                        
+            $('#ex1-streetview').toggle(function () {                                                   
+                $('#map_canvas').gmap('getService', 'StreetViewPanorama').setVisible(true);
+            }, function() { 
+                $('#map_canvas').gmap('getService', 'StreetViewPanorama').setVisible(false);
+                resetbutton(this); 
+            } 
+            );                      
+        }
+        });
+
+    });
+</script>	
+			<div data-role="content">                 
+				<div class="ui-bar-c ui-corner-all ui-shadow" id="map_item">
+					<div id="map_canvas"></div>
+				</div>
+				<p><strong>Tap</strong> on marker to see info window. <strong>Tap</strong> buttons below to toggle map view.</p>
+				
+				<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;">
+					<a href="#" data-role="button" id="ex1-streetview">Streetview</a>
+					<a href="#" data-role="button" id="ex1-traffic">Traffic</a>
+					<a href="#" data-role="button" id="ex1-terrain">Terrain</a>
+					<a href="#" data-role="button" id="ex1-bike">Bicycle</a>
+				</div>
+				
+				<p>User controls can be removed from the map and managed with the jQuery Google Maps plugin and custom jQuery styling.</p>
+
+				<div id="gmap-info">
+					<h2>AppLaud with jQuery Mobile and Google Maps</h2>
+					<p>Install <a href="http://www.mobiledevelopersolutions.com/home/start">MDS AppLaud</a> and
+					download the <a href="http://code.google.com/p/jquery-ui-map/">jQuery Google Maps Plugin</a>.
+					AppLaud bundles PhoneGap for Android and jQuery Mobile.
+					Download GMap Demo <a href="https://github.com/libbybaldwin/GMap-Demo-App">source</a> for examples.</p>
+				</div>
+
+			</div> <!-- /content -->
+
+			<div data-role="footer" data-theme="c" >
+				<div data-role="navbar">
+					<ul>
+						<li><a rel="external" href="../index.html">Back to Menu</a></li>
+						<li><a rel="external" href="../about.html">About GMap Demo</a></li>
+					</ul>
+				</div>
+			</div>
+		</div> <!-- /gmap-ex1 -->
+				
+	</body>	
+</html>
