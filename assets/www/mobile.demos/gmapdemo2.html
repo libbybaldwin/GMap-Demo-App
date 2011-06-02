@@ -95,10 +95,17 @@
                             var addr = results[0].formatted_address.split(', ', 4);
                             //alert('[' + addr[0] + '] [' + addr[1] + '] [' + addr[2] + '] [' + addr[3] + ']');                         
                             $('#address' + marker.__gm_id).val(addr[0] + ", " + addr[1] + ", " + addr[2]);
+                            openMarkerDialog(marker);
                         } else {
+                        	// TODO open empty dialog
                             alert('Unable to get GeoSearch data.');
+                            
+                            // Hold the div mclass{id} in markerdiv
+                       	 	$('.mclass'+marker.__gm_id)
+                            .css({ "display": "none"})
+                            .appendTo('#markerdiv');
+                            
                         }
-                        openMarkerDialog(marker);
                     });
                 } // end getGeoData
                 
@@ -109,8 +116,8 @@
                     $("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all' id='dialog" + marker.__gm_id + "' style='z-index:9999;'></div>")
                     .append('<h4 style="margin:0.2em;">Edit &amp; Save Marker</h4>')
                     .append( $('div.mclass'+marker.__gm_id).css({ "display": "block"})
-                        .append('<div data-inline="true" id="dialog-btns" ><a href="#" id="ex4-remove" class="mbtn" style="font-size:15px">Remove</a>'
-                         + '<a href="#" id="ex4-save" class="mbtn">&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;</a></div>') )
+                        .append('<div data-inline="true" id="dialog-btns" ><a id="ex4-remove" class="mbtn" style="font-size:15px">Remove</a>'
+                         + '<a id="ex4-save" class="mbtn">&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;</a></div>') )
                     .css({ "display": "block", "opacity": 0.9, "top": $(window).scrollTop() + 90 })
                     .appendTo( $.mobile.pageContainer );
                     

@@ -30,7 +30,7 @@
         <script type="text/javascript" src="../ui/jquery.ui.map.min.js"></script>
        
 	</head>
-    <body onload="loadScript();">
+    <body>
 		
 		<div id="doc">
 		
@@ -72,7 +72,8 @@
 		</div>
 		
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[				
+			$(function() {
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -115,10 +116,6 @@
  				mapitem.style.padding = '1em';
 				gmapinfo.style.display = 'block';
   			}
-		}
-		function loadMaps () {  				
-		//<![CDATA[				
-			$(function() {
 				
 				$('#map_canvas').gmap({ 'streetViewControl': false, 'mapTypeControl': false, 'navigationControlOptions': {'position':google.maps.ControlPosition.TOP_RIGHT},'center': new google.maps.LatLng(59.3426606750, 18.0736160278), 'callback': function(map) {
 					
@@ -171,11 +168,6 @@
 					
             });
 		//]]>
-		}
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>		
 					
     </body>

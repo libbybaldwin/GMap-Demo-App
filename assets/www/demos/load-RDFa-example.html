@@ -38,7 +38,7 @@
 		<script type="text/javascript" src="../ui/jquery.ui.gmap.rdfa.min.js"></script>
 
     </head>
-    <body onload="loadScript();">
+    <body>
 	
 		<div id="doc">
 		
@@ -94,7 +94,8 @@
 			<p><a class="buttonize ftr" rel="external" href="../index.html">Return to Menu</a><a class="buttonize ftr" style="float : right;" rel="external" href="../about.html">About GMap Demo</a></p>		
 		</div>	
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[
+            $(function() {
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -134,10 +135,6 @@
  				mapitem.style.margin = '0 0 2em';
  				mapitem.style.padding = '1em';
   			}
-		}
-		function loadMaps () {
-		//<![CDATA[
-            $(function() {
 
 				$('#sidebar-wrap').hide();
 				$('#map_canvas').gmap({ 'navigationControl': false, 'streetViewControl': false, 'callback': function() {
@@ -165,11 +162,6 @@
 				}});
             });
         //]]>    
-		}
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>				
 				
     </body>

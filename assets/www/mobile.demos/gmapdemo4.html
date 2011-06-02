@@ -49,12 +49,17 @@ $('#gmap-ex1').live("pagebeforecreate", function() {
 		gmapinfo.style.display = 'block';				
   	}
 });			 
+
 $('#gmap-ex1').live("pageshow", function() {
+        var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
         function getLatLng() {
             return new google.maps.LatLng(37.8020027, -122.4196192);
         }
+        $('.ctrlbtns').fadeIn(3300);
         
         $('#map_canvas').gmap({'center': getLatLng(), 'zoom' : 14, 'streetViewControl' : false, 'mapTypeControl' : false, 'callback': function() {
+            // Create streetView, set to false, set POV to face SF Bay
+            $('#map_canvas').gmap('displayStreetView', 'map_canvas', { 'position' : getLatLng(), 'visible' : false, pov: { heading: 90, pitch: -5, zoom: 1 } });                        
             $('#map_canvas').gmap('addMarker', {'position': getLatLng(), 'animation': google.maps.Animation.DROP, 'title': 'Hello world!', 
                 'icon': new google.maps.MarkerImage('images/markers/cablecar.png')}, function(map, marker) {
                     $('#map_canvas').gmap('addInfoWindow', { 'position':marker.getPosition() , 
@@ -69,7 +74,9 @@ $('#gmap-ex1').live("pageshow", function() {
                                     }); 
                                        }); 
                      });
-            var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
+	        }
+        });
+        
             var trafficLayer = new google.maps.TrafficLayer();
             $('#ex1-traffic').toggle(function () {                                                  
                 trafficLayer.setMap($('#map_canvas').gmap('getMap')); 
@@ -96,8 +103,6 @@ $('#gmap-ex1').live("pageshow", function() {
             } 
             );                      
                 
-            // Create streetView, set to false, set POV to face SF Bay
-            $('#map_canvas').gmap('displayStreetView', 'map_canvas', { 'position' : getLatLng(), 'visible' : false, pov: { heading: 90, pitch: -5, zoom: 1 } });                        
             $('#ex1-streetview').toggle(function () {                                                   
                 $('#map_canvas').gmap('getService', 'StreetViewPanorama').setVisible(true);
             }, function() { 
@@ -105,8 +110,6 @@ $('#gmap-ex1').live("pageshow", function() {
                 resetbutton(this); 
             } 
             );                      
-        }
-        });
 
     });
 </script>	
@@ -116,11 +119,11 @@ $('#gmap-ex1').live("pageshow", function() {
 				</div>
 				<p><strong>Tap</strong> on marker to see info window. <strong>Tap</strong> buttons below to toggle map view.</p>
 				
-				<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;">
-					<a href="#" data-role="button" id="ex1-streetview">Streetview</a>
-					<a href="#" data-role="button" id="ex1-traffic">Traffic</a>
-					<a href="#" data-role="button" id="ex1-terrain">Terrain</a>
-					<a href="#" data-role="button" id="ex1-bike">Bicycle</a>
+				<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;" class="ctrlbtns">
+					<a data-role="button" id="ex1-streetview">Streetview</a>
+					<a data-role="button" id="ex1-traffic">Traffic</a>
+					<a data-role="button" id="ex1-terrain">Terrain</a>
+					<a data-role="button" id="ex1-bike">Bicycle</a>
 				</div>
 				
 				<p>User controls can be removed from the map and managed with the jQuery Google Maps plugin and custom jQuery styling.</p>

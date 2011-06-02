@@ -51,6 +51,8 @@
 			});			
             $('#gmap-ex5').live("pageshow", function() {
                 var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
+                $('.ctrlbtns').fadeIn(3000);
+                
                 athens = new google.maps.LatLng(37.96098194415897, 23.697509765625); 
                 bangkok = new google.maps.LatLng(13.675344552820276, 100.55511474609375);
                 sydney = new google.maps.LatLng(-33.872125899439446, 151.1821746826172);
@@ -73,16 +75,15 @@
                    resetother('#ex5-bangkok','#ex5-athens','#ex5-current');
                 });
                 $('#ex5-current').click(function () { 
+                	fadingMsg ("Using device geolocation service to find location.");
                     $('#map_canvas_5').gmap('getCurrentPosition', function(status, pos) {
                     	if (status === "OK") {
-                    		//alert("ok");
                     		$('#map_canvas_5').gmap('option', 'center', new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
                     	} else {
-                    		defaultLatLngMsg ();
-                    		//alert("not ok");
+                    		fadingMsg (null);
                     		$('#map_canvas_5').gmap('option', 'center', new google.maps.LatLng(34.0522342, -118.2436849));
                     	}                    
-                    }, { timeout: 3000, enableHighAccuracy: true } );                                           
+                    }, { timeout: 4000, enableHighAccuracy: true } );                                           
                     
                     resetother('#ex5-bangkok','#ex5-sydney','#ex5-athens');
                 });
@@ -91,11 +92,17 @@
                     resetbutton(one); resetbutton(two); resetbutton(three);
                 }
                 
-                function defaultLatLngMsg () {
+                function fadingMsg (locMsg) {
                     var msg = "<span style='color:#f33;'>Error</span> while getting geolocation. Using default location.";
+                    var opac = 1;
+                    if (locMsg !== null) {
+                        msg = locMsg;
+                        opac = 0.9;
+                    }
+                    
                     $("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>"
                         + msg + "</h1></div>")
-                        .css({ "display": "block", "opacity": 1.0, "top": $(window).scrollTop() + 100 })
+                        .css({ "display": "block", "opacity": opac, "top": $(window).scrollTop() + 250 })
                         .appendTo( $.mobile.pageContainer )
                         .delay( 2400 )
                         .fadeOut( 1200, function(){
@@ -113,11 +120,11 @@
 				
 				<p><strong>Tap</strong> image to see details in info window.</p>
 				
-				<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;">
-					<a href="#" data-role="button" class="ui-btn-active" id="ex5-athens">Athens</a>
-					<a href="#" data-role="button" id="ex5-bangkok">Bangkok</a>
-					<a href="#" data-role="button" id="ex5-sydney">Sydney</a>
-					<a href="#" data-role="button" id="ex5-current">Current</a>
+				<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;" class="ctrlbtns">
+					<a data-role="button" class="ui-btn-active" id="ex5-athens">Athens</a>
+					<a data-role="button" id="ex5-bangkok">Bangkok</a>
+					<a data-role="button" id="ex5-sydney">Sydney</a>
+					<a data-role="button" id="ex5-current">Current</a>
 				</div>
 
 				<p>To access Panoramio layer use <strong>sensor=true&libraries=panoramio</strong> with google maps <strong>jsapi</strong>.</p>

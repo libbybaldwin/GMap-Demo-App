@@ -30,7 +30,7 @@
 		<script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer_packed.js" type="text/javascript"></script>
         
     </head>
-    <body onload="loadScript();">
+    <body>
 	
     	<div id="doc">
 			
@@ -61,7 +61,9 @@
 			<p><a class="buttonize ftr" rel="external" href="../index.html">Return to Menu</a><a class="buttonize ftr" style="float : right;" rel="external" href="../about.html">About GMap Demo</a></p>		
 		</div>	
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[
+        $(function() {
+								
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -101,25 +103,16 @@
  				mapitem.style.margin = '0 0 2em';
  				mapitem.style.padding = '1em';
   			}
-		}
-		function loadMaps () {  				
-		//<![CDATA[
-            $(function() {
-								
-				$('#map_canvas').gmap({ 'center': new google.maps.LatLng(42.545573,-71.698326), 'zoom' : 7, 'callback': function() {
-						for ( var i=1; i < 100; i++ ) {
-							$('#map_canvas').gmap('addMarker', { position: new google.maps.LatLng(42.345573 + (i/100),-71.098326 - (2*(Math.random()))) } );
-						}
-				}});
-				var markerCluster = new MarkerClusterer($('#map_canvas').gmap('getMap'), $('#map_canvas').gmap('getMarkers'));
+
+			$('#map_canvas').gmap({ 'center': new google.maps.LatLng(42.545573,-71.698326), 'zoom' : 7, 'callback': function() {
+					for ( var i=1; i < 100; i++ ) {
+						$('#map_canvas').gmap('addMarker', { position: new google.maps.LatLng(42.345573 + (i/100),-71.098326 - (2*(Math.random()))) } );
+					}
+			}});
+			var markerCluster = new MarkerClusterer($('#map_canvas').gmap('getMap'), $('#map_canvas').gmap('getMarkers'));
 				
-            });
+        });
 		//]]>
-		}
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>
 						
     </body>

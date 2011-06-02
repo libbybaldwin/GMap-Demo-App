@@ -51,6 +51,8 @@
   	}
 	}); 
     $('#gmap-ex3').live("pageshow", function() {
+         $('.ctrlbtns').fadeIn(3300);
+                
         $('#map_canvas_3').gmap({'center': new google.maps.LatLng(34.288991865037524, -115.224609375), 'zoom' : 5 });                   
         var resetbutton = function(buttonname) { $(buttonname).removeClass("ui-btn-active"); };
         var travelModes = [google.maps.DirectionsTravelMode.DRIVING, google.maps.DirectionsTravelMode.BICYCLING, google.maps.DirectionsTravelMode.WALKING]; 
@@ -142,11 +144,11 @@
 					</div>
 					</fieldset>
 				
-					<div data-role="controlgroup" data-type="horizontal" style="margin:0.6em 0.3em;">
-						<a href="#" data-role="button" id="ex3-drive">&nbsp;Drive&nbsp;</a>					
-						<a href="#" data-role="button" id="ex3-bike">&nbsp;Bike&nbsp;</a>			
-						<a href="#" data-role="button" id="ex3-walk">&nbsp;Walk&nbsp;</a>			
-						<a href="#" data-role="button" id="ex3-traffic" style="color:#139;">Traffic&nbsp;</a>			
+					<div data-role="controlgroup" data-type="horizontal" style="margin:0.6em 0.3em;" class="ctrlbtns">
+						<a data-role="button" id="ex3-drive">&nbsp;Drive&nbsp;</a>					
+						<a data-role="button" id="ex3-bike">&nbsp;Bike&nbsp;</a>			
+						<a data-role="button" id="ex3-walk">&nbsp;Walk&nbsp;</a>			
+						<a data-role="button" id="ex3-traffic" style="color:#139;">Traffic&nbsp;</a>			
 					</div>
 					
 				</div>

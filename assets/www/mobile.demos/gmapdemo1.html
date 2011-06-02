@@ -39,10 +39,10 @@
 
 			<p><strong>Tap</strong> on marker to see location data. <strong>Tap</strong> buttons below to toggle map layers.</p>
 
-			<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;">
-				<a href="#" data-role="button" id="ex2-streetview">&nbsp;Streetview&nbsp;</a>
-				<a href="#" data-role="button" id="ex2-traffic">&nbsp;&nbsp;Traffic&nbsp;&nbsp;</a>
-				<a href="#" data-role="button" id="ex2-terrain">&nbsp;&nbsp;Terrain&nbsp;&nbsp;</a>
+			<div data-role="controlgroup" data-type="horizontal" style="font-size:14px;" class="ctrlbtns">
+				<a data-role="button" id="ex2-streetview">&nbsp;Streetview&nbsp;</a>
+				<a data-role="button" id="ex2-traffic">&nbsp;&nbsp;Traffic&nbsp;&nbsp;</a>
+				<a data-role="button" id="ex2-terrain">&nbsp;&nbsp;Terrain&nbsp;&nbsp;</a>
 			</div>
 			<p>Edit <strong>Location</strong>, <strong>Security</strong> and <strong>Network</strong> settings to enable device geolocation.</p>
 			
@@ -94,25 +94,27 @@
                 var currentLatLng;
                 var accuracy= -1;
                 
-                defaultLatLngMsg("Using device geolocation service to find location.");          
+                fadingMsg("Using device geolocation service to find location.");
+                                          
                 if ( navigator.geolocation ) {
-                    defaultLatLngMsg("Using device geolocation service to find location.");
                     navigator.geolocation.getCurrentPosition ( function( position ) {
                             currentLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                             accuracy = position.coords.accuracy;
                             makeMap(currentLatLng, accuracy);
                         }, function(error) {
                             currentLatLng = new google.maps.LatLng(42.3375879, -83.049514);
-                            defaultLatLngMsg(null);
+                            fadingMsg(null);
                             makeMap(currentLatLng, accuracy);
-                        } , { timeout: 3000, enableHighAccuracy: true }
+                        } , { timeout: 3400, enableHighAccuracy: true }
                         );                                     
                     } else { 
                         currentLatLng = new google.maps.LatLng(42.3375879, -83.049514);
-                        defaultLatLngMsg(null);
+                        fadingMsg(null);
                         makeMap(currentLatLng, accuracy);
                     } 
                                           
+                $('.ctrlbtns').fadeIn(3300);
+                
                 function makeMap (curLatLng, accuracy) { 
                 	$('#map_canvas_2').gmap( { 'center': curLatLng,  'zoom': 11, 'callback': function (map) { 
                     	$('#map_canvas_2').gmap('displayStreetView', 'map_canvas_2', { 'position' : curLatLng, 'visible' : false, pov: { heading: 15, pitch: 10, zoom: 1 } });
@@ -139,11 +141,11 @@
                         if ( found ) {
                             var addr = results[0].formatted_address.split(', ', 4);
                             //alert('[' + addr[0] + '] [' + addr[1] + '] [' + addr[2] + '] [' + addr[3] + ']');
-                            iw.setContent('<div id="ex2-iw-content" style="font-size:14px;max-width:240px;width:240px;height:300px;max-height:300px; !important;color:green;">You are here!<br/>Lat: ' 
+                            iw.setContent('<div id="ex2-iw-content" style="font-size:14px;max-width:240px;width:240px;height:9em;max-height:9em;color:green;">You are here!<br/>Lat: ' 
                                 + marker.getPosition().lat().toFixed(4) + ', Lng: ' + marker.getPosition().lng().toFixed(4) + '<br/>' + accuracyStr 
                                 + '<br/>' + addr[0] + '<br/>' + addr[1] + ', ' + addr[2] + '<br/>' + addr[3] + '</div>');
                         } else {
-                            defaultLatLngMsg('Unable to get GeoSearch data.');
+                            fadingMsg('Unable to get GeoSearch data.');
                             iw.setContent('<div id="ex2-iw-content" style="font-size:14px;max-width:240px;width:240px;height:300px;max-height:300px; !important;color:green;">You are here!<br/>Lat: ' 
                                 + marker.getPosition().lat().toFixed(4) + ', Lng: ' + marker.getPosition().lng().toFixed(4) + '</div>');
                         }
@@ -152,7 +154,7 @@
                 }
 
                 // Briefly show that default loc is being used
-                function defaultLatLngMsg (locMsg) {
+                function fadingMsg (locMsg) {
                     var msg = "Device location <span style='color:#f33;'>not found</span>. Using default location.";
                     var opac = 1.0;
                     if (locMsg !== null) {
@@ -161,7 +163,7 @@
                     }
                     $("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>"
                         + msg + "</h1></div>")
-                        .css({ "display": "block", "opacity": opac, "top": $(window).scrollTop() + 100 })
+                        .css({ "display": "block", "opacity": opac, "top": $(window).scrollTop() + 250 })
                         .appendTo( $.mobile.pageContainer )
                         .delay( 2400 )
                         .fadeOut( 1200, function(){

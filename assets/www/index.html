@@ -43,9 +43,9 @@
 				
 				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="d" id="ui-example-list"> 
 					<li data-role="list-divider">jQuery UI & Google Maps Examples</li> 
-					<li><a rel="external" href="demos/load-Fusion.html">Google Fusion Tables</a></li>
 					<li><a rel="external" href="demos/click-drag-geo-search.html">GeoSearch and Click/Drag Events</a></li>
 					<li><a rel="external" href="demos/advanced-example.html">Microformats, Streetview, jQuery Dialog</a></li>
+					<li><a rel="external" href="demos/load-Fusion.html">Google Fusion Tables</a></li>
 					<li><a rel="external" href="demos/google-maps-jquery-markerclusterer.html">Marker Clusterer Utility</a></li>
 					<li><a rel="external" href="demos/google-maps-jquery-filtering.html">Custom Controls & Marker Filter by Tag</a></li>
 					<li><a rel="external" href="demos/multiple-maps-example.html">Multiple Maps on Single Page</a></li>
@@ -82,10 +82,10 @@
        		// alert(useragent);
   			if ((useragent.indexOf('Android 3.') != -1) && (screen.width >= 800) && (screen.height >= 800)) {
   				// conservatively adding Microdata only to Android 3 Tabs or desktop
-				$('#ui-example-list').append('<li><a rel="external" data-ajax="false" href="demos/load-Microdata-example.html">Markers from Microdata</a></li>');			
+				$('#ui-example-list').append('<li><a rel="external" href="demos/load-Microdata-example.html">Markers from Microdata</a></li>');			
 			} else if ((useragent.indexOf('Android 2.') != -1 ) || (useragent.indexOf('Android 3.') != -1 )) {
  			} else {
-				$('#ui-example-list').append('<li><a rel="external" data-ajax="false" href="demos/load-Microdata-example.html">Markers from Microdata</a></li>');
+				$('#ui-example-list').append('<li><a rel="external" href="demos/load-Microdata-example.html">Markers from Microdata</a></li>');
   			}
 		});
 	</script>

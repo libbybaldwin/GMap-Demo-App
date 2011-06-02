@@ -28,7 +28,7 @@
         <script type="text/javascript" src="../ui/jquery.ui.map.min.js"></script>		
         
 	</head>
-    <body onload="loadScript();">
+    <body>
 		
 		<div id="doc">
 			
@@ -59,7 +59,9 @@
 		</div>
 		
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[
+			$(function() {
+
  			var useragent = navigator.userAgent;
   			var doc = document.getElementById("doc");
 			var gmapinfo = document.getElementById("gmap-info");
@@ -86,11 +88,6 @@
   
 				gmapinfo.style.display = 'block';
   			}
-		}
-		function loadMaps () {
-		//<![CDATA[
-			$(function() {
-
 				var latlngs = [];
 				latlngs.push(new google.maps.LatLng(59.3426606750, 18.0736160278));
 				latlngs.push(new google.maps.LatLng(37.7749295, -122.4194155));
@@ -105,6 +102,9 @@
 				for ( var i = 0; i < latlngs.length; i++ ) {
 					var cssclass = ( i == 0 ) ? 'first' : '';
 					$('#multiple-maps').append('<div class="multi-map-wrap '+cssclass+'"><div id="m'+i+'" class="multi-map"></div><p><a class="buttonize" id="c'+i+'" href="#">Clear markers</a></p></div>');
+					if (document.getElementById("doc").style.margin === 'auto') {
+						$('.multi-map').css({"width":"250", "height":"250"});
+					}									
 					$('#m'+i).gmap({ 'center': latlngs[i], 'streetViewControl': false, 'mapTypeControl': false, 'navigationControl': false, 'callback': 
 						function(map) {
 							var self = $('#m'+i);
@@ -115,11 +115,10 @@
 							});
 						} 
 					});
-					if (document.getElementById("doc").style.margin === 'auto') {
-						$('.multi-map').css({"width":"250", "height":"250"});
-					}				
 				}
 				
+				$('.buttonize').fadeIn(2500);
+
 				function shuffle(array) {
 					var tmp, current, top = array.length;
 					if(top) while(--top) {
@@ -133,12 +132,6 @@
 				
             });
 		//]]>
-
-		}		
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>
 					
     </body>

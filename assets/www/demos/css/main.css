@@ -17,13 +17,13 @@ abbr { border:none; }
 #sidebar a.url { word-wrap: break-word; }
 #sidebar { height:195px; width:105px; background:#f4f4f4; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; -moz-box-shadow: 0 0 20px #777; -webkit-box-shadow: 0 0 20px #777; border: 3px solid #fff; display:block; padding:0.5em; margin:0.5em; }
 .multi-map-wrap { float:left; margin:0 0 0 4px; }
-.multi-map { width:142px; height: 142px; margin: 0 0 4px; border: 2px solid #555; }
+.multi-map { width:142px; height: 142px; margin: 0 0 8px; border: 2px solid #555; }
 div.first { margin:0; }
 
-a.buttonize{ background: #008595; display: inline-block; padding: 5px 8px 6px; color: #fff; text-decoration: none; font-weight: bold; line-height: 1; -webkit-border-radius: 5px; -moz-border-radius: 5px; -webkit-box-shadow: 2px 2px 5px #ccc; -moz-box-shadow: 2px 2px 5px #ccc; text-shadow: 0 1px 1px #2A3333; position: relative; cursor: pointer; }
+a.buttonize{ display: none; background: #008595; padding: 5px 8px 6px; color: #fff; text-decoration: none; font-weight: bold; line-height: 1; -webkit-border-radius: 5px; -moz-border-radius: 5px; -webkit-box-shadow: 2px 2px 5px #ccc; -moz-box-shadow: 2px 2px 5px #ccc; text-shadow: 0 1px 1px #2A3333; position: relative; cursor: pointer; }
 a.buttonize:hover	{ background-color: #2A3333; color: #fff; }
 a.buttonize:active	{ top: 1px; }
-a.buttonize.ftr { margin: 0.7em 1.2em;  }
+a.buttonize.ftr { margin: 0.7em 1.2em; display: inline-block; }
 
 #hd { margin:0; text-align: center;}
 .gmap-title { color: #008595; }

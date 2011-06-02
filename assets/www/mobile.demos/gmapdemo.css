@@ -30,6 +30,6 @@ h2 { color: #008595; text-decoration: none; font-size: 16px; display: block; }
 .ui-body-e { border: 1px solid #008595; color: #333; font-size: 16px; text-shadow: none; background: #cceeff; padding: 0.3em 0.4em; width: 240px;}
 
 a.mbtn{ background: #008595; display: inline-block; margin: 0.3em 1.5em; padding: 5px 8px 6px; color: #eef; text-decoration: none; font-size: 15px; font-weight: bold; line-height: 1; -webkit-border-radius: 5px; -moz-border-radius: 5px; -webkit-box-shadow: 2px 2px 5px #ccc; -moz-box-shadow: 2px 2px 5px #ccc; text-shadow: 0 1px 1px #2A3333; position: relative; cursor: pointer; }
-
+.ctrlbtns { display: none; }
 #gmap-info { display: none; }
 

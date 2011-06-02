@@ -46,7 +46,7 @@
 			
 		</style>
     </head>
-    <body onload="loadScript();">
+    <body>
         
         <div id="doc">
 		
@@ -128,7 +128,8 @@
 			<p><a class="buttonize ftr" rel="external" href="../index.html">Return to Menu</a><a class="buttonize ftr" style="float : right;" rel="external" href="../about.html">About GMap Demo</a></p>		
 		</div>			
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[
+			$(function() {
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -171,10 +172,6 @@
  				mapitem.style.padding = '1em';
 				gmapinfo.style.display = 'block';
   			}
-		}
-		function loadMaps () {
-		//<![CDATA[
-			$(function() {
 				
 				$('#map_canvas').gmap({ 'callback': function () {
 						$('#map_canvas').gmap('loadMetadata', 'microdata', 'http://data-vocabulary.org/Event', function(index, item, result) {
@@ -198,11 +195,6 @@
 				});
             });
 		//]]> 
-		}
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>				
 	        
     </body>

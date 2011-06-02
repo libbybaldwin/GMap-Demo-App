@@ -30,7 +30,7 @@
         <script type="text/javascript" src="../ui/jquery.ui.map.min.js"></script>
       
 	</head>
-    <body onload="loadScript();">
+    <body>
 		
 		<div id="doc">
 		
@@ -44,10 +44,10 @@
 			
 			<p><strong>Zoom</strong> in and tap on marker for accident details. <strong>Tap</strong> on buttons to toggle fusion layers or map options.<br/></p>
 
-			<a class="buttonize" id="ex1-heatmap" href="#">Heatmap</a>
-			<a class="buttonize" id="ex1-query" style="margin:0 7px;" href="#">Query</a>
-			<a class="buttonize" id="ex1-bicycle" href="#">Bicycle</a>
-			<a class="buttonize" id="ex1-traffic" style="margin:0 7px;" href="#">Traffic</a>
+			<a class="buttonize" id="ex1-heatmap">Heatmap</a>
+			<a class="buttonize" id="ex1-query" style="margin:0 7px;">Query</a>
+			<a class="buttonize" id="ex1-bicycle">Bicycle</a>
+			<a class="buttonize" id="ex1-traffic" style="margin:0 7px;">Traffic</a>
 			
 			<p><br/><strong>Query</strong> shows all bike accidents in October 2010.</p>
 
@@ -64,13 +64,16 @@
 				Download GMap Demo <a href="https://github.com/libbybaldwin/GMap-Demo-App">source</a> for examples.
 			</p>
 			</div>
+			<div id="dialog"></div>
 		</div>
 		<div class="ftbar">
 			<p><a class="buttonize ftr" rel="external" href="../index.html">Return to Menu</a><a class="buttonize ftr" style="float:right;" rel="external" href="../about.html">About GMap Demo</a></p>		
 		</div>
 
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[
+		$(function() {
+			//function detectBrowser() {
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -114,58 +117,48 @@
  				mapitem.style.padding = '1em';
  				gmapinfo.style.display = 'block';
   			}
-		}
-		function loadMaps () {
-   				
-		//<![CDATA[
-			$(function() {
-				
-				$('#map_canvas').gmap({ 'center': new google.maps.LatLng(37.748457761603355, -122.43576049804688), 'zoom': 11, 'mapTypeId' : google.maps.MapTypeId.ROADMAP,
-					'callback': function(map) {
-						$('#map_canvas').gmap('loadFusion', { 'query': { 'from': '433634' } });										
 
-						$('#ex1-heatmap').toggle (function() {
-								$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'heatmap' : { enabled: true }});
-							}, function() {
-                        		$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'heatmap' : { enabled: false }});
-                        	}
-						);
-						$('#ex1-query').toggle (function() {
-								$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'query' : { 'from': '433634', 'select' : 'FullAddress', 'where' : 'Year=2010 AND Month=10' }});
-							}, function() {
-								$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'query' : { 'from': '433634' }});
-                        	}
-						);
-						var trafficLayer = new google.maps.TrafficLayer();
-						$('#ex1-traffic').toggle (function() {
-                        		trafficLayer.setMap($('#map_canvas').gmap('getMap')); 
-                       	 	}, function() {
-                        		trafficLayer.setMap(null); 
-                        	}
-						);
-						var bicycleLayer = new google.maps.BicyclingLayer();
-						$('#ex1-bicycle').toggle (function() {
-								bicycleLayer.setMap($('#map_canvas').gmap('getMap'));
-							}, function() {
-                        		bicycleLayer.setMap(null); 
-                        	}
-						);
-					}
-				});
-            });
-        //]]>
-				
-			}
-		function loadScript() {
-			detectBrowser();
-			// To load google maps js with a callback
-  			//var script = document.createElement("script");
-  			//script.type = "text/javascript";
-  			//script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=loadMaps";
-  			//script.src = "http://maps.google.com/maps/api/js?sensor=false";
-  			//document.body.appendChild(script);
-			loadMaps();
-		} 
+			$('.buttonize').fadeIn(3000);
+								
+			$('#dialog').append('<br/><br/><p>Loading Fusion Table for San Franciso Bike Accident data complied by www.baycitizen.org.</p>');
+			$("#dialog").dialog({ title : 'Fusion Table Layer', closeOnEscape: false, modal : 'true', hide: 'fade', maxHeight: 200 });
+
+			$('#map_canvas').gmap({ 'center': new google.maps.LatLng(37.748457761603355, -122.43576049804688), 'zoom': 11, 'mapTypeId' : google.maps.MapTypeId.ROADMAP,
+				'callback': function(map) {
+					
+					$('#map_canvas').gmap('loadFusion', { 'query': { 'from': '433634' } });
+					var t = setTimeout(function() {$('#dialog').dialog('close');}, 2000);						
+				}
+			});						
+
+			$('#ex1-heatmap').toggle (function() {
+				$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'heatmap' : { enabled: true }});
+			}, function() {
+               	$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'heatmap' : { enabled: false }});
+               }
+			);
+			$('#ex1-query').toggle (function() {
+					$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'query' : { 'from': '433634', 'select' : 'FullAddress', 'where' : 'Year=2010 AND Month=10' }});
+				}, function() {
+					$('#map_canvas').gmap('getService', 'FusionTablesLayer').setOptions( {'query' : { 'from': '433634' }});
+                      }
+			);
+			var trafficLayer = new google.maps.TrafficLayer();
+			$('#ex1-traffic').toggle (function() {
+                trafficLayer.setMap($('#map_canvas').gmap('getMap')); 
+            }, function() {
+                trafficLayer.setMap(null); 
+            }
+			);
+			var bicycleLayer = new google.maps.BicyclingLayer();
+			$('#ex1-bicycle').toggle (function() {
+				bicycleLayer.setMap($('#map_canvas').gmap('getMap'));
+			}, function() {
+                bicycleLayer.setMap(null); 
+            }
+			);				
+     });
+//]]>
 		</script>
 
     </body>

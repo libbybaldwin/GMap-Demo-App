@@ -29,7 +29,7 @@
 <!-- 		</script>         -->
         <script type="text/javascript" src="../ui/jquery.ui.map.min.js"></script>
     </head>
-    <body onload="loadScript();">
+    <body>
 		
 		<div id="doc">
 		
@@ -62,7 +62,8 @@
 			<p><a class="buttonize ftr" rel="external" href="../index.html">Return to Menu</a><a class="buttonize ftr" style="float : right;" rel="external" href="../about.html">About GMap Demo</a></p>		
 		</div>
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[ 				
+		$(function() {
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -105,25 +106,22 @@
  				mapitem.style.padding = '1em';
 				gmapinfo.style.display = 'block';
   			}
-		}
-		function loadMaps () {
-		//<![CDATA[ 				
-			$(function() {
-				$('#map_canvas').gmap({ 'zoom' : 7, 'center':new google.maps.LatLng(58.1026606750, 12.0736160278), 'streetViewControl': false, 'callback': function() {
-						$.getJSON( 'json.json', function(data) { 
-							$.each( data.markers, function(i, m) {
-								$('#map_canvas').gmap('addMarker', { 'position': new google.maps.LatLng(m.lat, m.lng), 'title' : m.title } );
-							});
-						});
-					}
+
+			$('#map_canvas').gmap({ 'zoom' : 7, 'center':new google.maps.LatLng(58.1026606750, 12.0736160278), 'streetViewControl': false, 'callback': function() {
+				$.getJSON( 'json.json', function(data) { 
+					$.each( data.markers, function(i, m) {
+						$('#map_canvas').gmap('addMarker', { 'position': new google.maps.LatLng(m.lat, m.lng), 'title' : m.title } );
+					});
 				});
+			  }
+			});
+//		}
+		//function loadScript() {
+		//	detectBrowser();
+		//	loadMaps();
+		//} 
             });
         //]]>
-		}
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>		
 					
     </body>

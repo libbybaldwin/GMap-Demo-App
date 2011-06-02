@@ -32,7 +32,7 @@
 		<script type="text/javascript" src="../ui/jquery.ui.gmap.microformat.min.js"></script>
 
     </head>
-    <body onload="loadScript();">
+    <body>
         
 		<div id="doc">
 		
@@ -87,7 +87,9 @@
 			<p><a class="buttonize ftr" rel="external" href="../index.html">Return to Menu</a><a class="buttonize ftr" style="float : right;" rel="external" href="../about.html">About GMap Demo</a></p>		
 		</div>	
 		<script type="text/javascript">
-		function detectBrowser() {
+		//<![CDATA[
+		$(function() {
+
  			var useragent = navigator.userAgent;
   			var mapdiv = document.getElementById("map_canvas");
  			var mapitem = document.getElementById("map_item");
@@ -96,7 +98,7 @@
   			if ((useragent.indexOf('Android 3.') != -1) && (screen.width >= 800) && (screen.height >= 800)) {
  				doc.style.width = '780px';
  				doc.style.maxWidth = '1240px';
-				doc.style.margin = 'auto';  //  '0 0.4em';
+				doc.style.margin = 'auto';  
   				doc.style.padding = '0 0.8em';
   					  				
  				mapdiv.style.height = '580px';
@@ -127,11 +129,6 @@
  				mapitem.style.margin = '0 0 2em';
  				mapitem.style.padding = '1em';
   			}
-		}
-		function loadMaps () {
-		//<![CDATA[
-			$(function() {
-
 				$('#sidebar-wrap').hide();
 				$('#map_canvas').gmap({ 'navigationControl': false, 'streetViewControl': false, 'callback': function() {
 					$('#map_canvas').gmap('loadMetadata', 'microformat', 'vevent', function(i, item, data) {
@@ -157,11 +154,6 @@
 				}});
             });
 		//]]>
-		}
-		function loadScript() {
-			detectBrowser();
-			loadMaps();
-		} 
 		</script>				
 				
     </body>
